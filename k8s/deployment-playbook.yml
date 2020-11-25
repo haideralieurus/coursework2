@@ -1,0 +1,29 @@
+
+- name: A playbook to deploy my applicatoin to Kubernetes on a VM
+  hosts: localhost
+  user: ubuntu
+  become: yes
+
+  tasks:
+  - name: 1. Deploy application to kubernetes
+    shell:
+      cmd: kubectl expose deployment/kubernetes-bootcamp --type="NodePort" --port 8080 --name node-port-service
+
+
+  - name: 2. Install dependency packages
+    apt:
+      name={{ item }}
+    with_items:
+      - apt-transport-https
+
+  - name: 3. Get APT Key
+    shell:
+      cmd: curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+
+  - name: 4. Add APT Repository
+    apt_repository:
+      repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+      state: present
+      filename: kubernetes.list
+
+
