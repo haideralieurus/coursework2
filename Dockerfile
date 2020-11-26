@@ -1,5 +1,7 @@
-FROM node:6.14.2
+FROM node:current-slim
+WORKDIR /usr/src/app
+RUN npm install
 EXPOSE 8080
 COPY server.js .
-CMD node server.js
+CMD [ "node", "server.js" ]
 
